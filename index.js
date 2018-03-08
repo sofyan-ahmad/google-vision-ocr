@@ -12,7 +12,7 @@ var gcloud = require("@google-cloud/vision");
 
 var vision = new gcloud.ImageAnnotatorClient({
   keyFilename: "./key.json",
-  projectId: "mandalalabs-197308"
+  projectId: "<PROJECT_ID>"
 });
 
 var app = express();
