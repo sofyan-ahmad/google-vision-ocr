@@ -43,6 +43,8 @@ app.post("/upload", upload.single("image"), function(req, res, next) {
   vision
     .textDetection("./" + req.file.destination + req.file.filename)
     .then(results => {
+      results = results[0].textAnnotations;
+
       results.forEach(result => {
         result.confidence = undefined;
         result.searchConfidence = [
@@ -89,7 +91,7 @@ app.post("/upload", upload.single("image"), function(req, res, next) {
             storeData: {}
           }
         ],
-        metaText: results[0].textAnnotations
+        metaText: results
       };
 
       res.send(JSON.stringify(results));
