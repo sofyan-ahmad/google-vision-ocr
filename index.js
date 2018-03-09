@@ -43,12 +43,56 @@ app.post("/upload", upload.single("image"), function(req, res, next) {
   vision
     .textDetection("./" + req.file.destination + req.file.filename)
     .then(results => {
-      const labels = results[0].textAnnotations;
+      results.forEach(result => {
+        result.confidence = undefined;
+        result.searchConfidence = [
+          {
+            text: "searchedtext1",
+            level: "unimplemented"
+          },
+          {
+            text: "searchedtext2",
+            level: "unimplemented"
+          }
+        ];
 
-      var result = [];
-      labels.forEach(label => result.push(label.description));
+        result.locations = undefined;
+        result.geoTaging = "Jakarta, Indonesia";
 
-      res.send(JSON.stringify(result));
+        result.properties = undefined;
+
+        result.text = result.description;
+        result.description = undefined;
+
+        result.__poly = result.boundingPoly;
+        result.boundingPoly = undefined;
+      });
+
+      results = {
+        fraudProximity: [
+          {
+            id: "UUID",
+            file: "htt://notimplemented",
+            percentage: 0
+          }
+        ],
+        analyticResult: [
+          {
+            products: [
+              {
+                id: "UUID",
+                productName: "notimplemented",
+                amount: "notimplemented",
+                price: 0.0
+              }
+            ],
+            storeData: {}
+          }
+        ],
+        metaText: results[0].textAnnotations
+      };
+
+      res.send(JSON.stringify(results));
     })
     .catch(err => {
       console.error("ERROR:", err);
